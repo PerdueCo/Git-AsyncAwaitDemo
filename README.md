@@ -213,6 +213,47 @@ app.Run();
 
 ---
 
+### ⚙️ 5.1, Program.cs — Register Services + HttpClient
+🛠 Required Program.cs Configuration
+
+To enable Swagger, HTTPS, routing, and HttpClient support, your project must include the following Program.cs setup:
+```csharp
+
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add HttpClient for external API calls
+builder.Services.AddHttpClient<IProductService, ProductService>();
+
+builder.Services.AddControllers();
+
+// Enable Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+var app = builder.Build();
+
+// Enable Swagger UI in Development
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+// Enable HTTPS redirection
+app.UseHttpsRedirection();
+
+app.MapControllers();
+
+app.Run();
+```
+
+**Important:**
+- Uses `AddHttpClient<T>()` for proper HttpClient management
+- Prevents socket exhaustion
+- Enables dependency injection
+
+---
 ## 🧪 Testing
 
 ### Test Endpoint
